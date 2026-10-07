@@ -1,0 +1,10 @@
+/vendor/
+/.env
+/.env.*
+!/.env.example
+!/.env.testing.example
+/.phpunit.cache/
+/.phpunit.result.cache
+/database/*.sqlite*
+/composer.phar
+/node_modules/

@@ -1,0 +1,59 @@
+name: Laravel CI
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  laravel-tests:
+    name: Laravel CRUD tests (PHP 8.3 / SQLite)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      APP_ENV: testing
+      DB_CONNECTION: sqlite
+      DB_DATABASE: ${{ github.workspace }}/database/ci.sqlite
+      SESSION_DRIVER: array
+      CACHE_STORE: array
+      QUEUE_CONNECTION: sync
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v6
+      - name: Install PHP and Composer
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, dom, fileinfo, pdo_sqlite, sqlite3
+          tools: composer:v2
+          coverage: none
+      - name: Validate Composer configuration
+        run: composer validate --strict
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist --no-progress
+      - name: Copy environment and generate application key
+        run: |
+          cp .env.example .env
+          cp .env.testing.example .env.testing
+          php artisan key:generate --env=testing
+          php artisan config:clear
+      - name: Prepare SQLite database
+        run: |
+          touch database/ci.sqlite
+          php artisan migrate --force --env=testing
+      - name: Run automated CRUD and validation tests
+        run: php artisan test --log-junit test-results.xml
+      - name: Upload test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: phpunit-results
+          path: test-results.xml
+          if-no-files-found: ignore
+      - name: Export initial dependency lock
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: initial-composer-lock
+          path: composer.lock
+          if-no-files-found: error

@@ -1,0 +1,35 @@
+@baseUrl = http://127.0.0.1:8000
+@studentId = 1
+
+### List
+GET {{baseUrl}}/api/students
+Accept: application/json
+
+### Create (copy returned data.id into studentId)
+POST {{baseUrl}}/api/students
+Accept: application/json
+Content-Type: application/json
+
+{"student_number":"STU-100","name":"Vanna Demo","email":"vanna@example.com","course":"DevOps"}
+
+### View
+GET {{baseUrl}}/api/students/{{studentId}}
+Accept: application/json
+
+### Update
+PATCH {{baseUrl}}/api/students/{{studentId}}
+Accept: application/json
+Content-Type: application/json
+
+{"course":"Laravel"}
+
+### Delete
+DELETE {{baseUrl}}/api/students/{{studentId}}
+Accept: application/json
+
+### Validation failure: 422
+POST {{baseUrl}}/api/students
+Accept: application/json
+Content-Type: application/json
+
+{"email":"not-an-email"}
