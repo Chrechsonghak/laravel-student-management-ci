@@ -6,13 +6,18 @@ A small Laravel 13 API for **Lesson 5 — Continuous Integration for Laravel**. 
 **The starter intentionally contains no active CI workflow on `main`.** Follow the [Lesson 5 Practice Session](https://docs.google.com/presentation/d/1h1yP-l7Ai2SxtNX0Fq4tzq1g4h5qcoGm8vMUNMZhB6I/edit) to write your own workflow.
 
 - [Individual student instructions](docs/LESSON5_PRACTICE.md)
+- [Windows: install PHP, enable extensions and install Composer](docs/windows-setup.md)
 - [Instructor: publish and restore a classroom regression](docs/INSTRUCTOR_GUIDE.md)
 
 This is a local/classroom demo with synthetic data and **no authentication**. Do not expose it with real student information. A production system needs authentication, authorization and appropriate data protection.
 
 ## Requirements and quick start
 
-PHP 8.3+, Composer 2, Git, and PHP's SQLite, PDO SQLite, mbstring, DOM/XML, fileinfo and curl extensions. No Node.js or MySQL is needed.
+PHP 8.3+, Composer 2, Git, and PHP's SQLite, PDO SQLite, mbstring, DOM/XML, fileinfo, curl and OpenSSL extensions. Enable zip for Composer downloads too. No Node.js or MySQL is needed.
+
+**Windows students:** start with the [Windows setup guide](docs/windows-setup.md). It covers PHP and Composer installation, the exact `php.ini` extensions, PATH checks, and PowerShell commands for this project. For the class exercise, [fork and clone your own copy](docs/LESSON5_PRACTICE.md#1-fork-and-clone).
+
+The quick start below is for **macOS/Linux or Git Bash** with PHP and Composer already installed:
 
 ```bash
 git clone https://github.com/maohieng/laravel-student-management-ci.git
@@ -25,7 +30,7 @@ php artisan migrate --seed
 php artisan serve
 ```
 
-Open <http://127.0.0.1:8000/api/students>. The seeder creates three fictional records and is safe to run again. On Windows use Git Bash for these shell examples, or copy the environment files using your file manager.
+Open <http://127.0.0.1:8000/api/students>. The seeder creates three fictional records and is safe to run again. Windows PowerShell users should use the equivalent commands in the [Windows setup guide](docs/windows-setup.md#6-optional-run-the-api-in-your-browser).
 
 ## API endpoints
 
@@ -75,6 +80,8 @@ curl -i -X DELETE -H 'Accept: application/json' http://127.0.0.1:8000/api/studen
 Single records are wrapped in `data`. Lists include `data`, `links` and `meta`. `requests.http` offers the same requests for an HTTP client/editor.
 
 ## Run tests locally
+
+For Windows PowerShell, follow [Set up your fork and run the tests](docs/windows-setup.md#5-set-up-your-fork-and-run-the-tests). For macOS/Linux or Git Bash:
 
 ```bash
 cp .env.testing.example .env.testing
@@ -134,6 +141,7 @@ Use a normal merge so your workflow remains in your fork. Do not hard-reset or f
 - `tests/Feature/StudentApiTest.php`: executable examples.
 - `.github/workflows/laravel-ci.yml`: the workflow you create in your own fork (intentionally absent upstream).
 - `docs/LESSON5_PRACTICE.md`: individual fork, CI, sync, and repair instructions.
+- `docs/windows-setup.md`: Windows PHP, extension, Composer and PowerShell setup.
 - `docs/INSTRUCTOR_GUIDE.md`: supervised regression and restoration guidance.
 
 Laravel's application skeleton is adapted from [laravel/laravel](https://github.com/laravel/laravel). Framework documentation: [testing](https://laravel.com/docs/13.x/testing), [validation](https://laravel.com/docs/13.x/validation), [Eloquent resources](https://laravel.com/docs/13.x/eloquent-resources).

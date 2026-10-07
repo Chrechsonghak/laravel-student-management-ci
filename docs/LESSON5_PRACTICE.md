@@ -2,11 +2,13 @@
 
 Follow the [Lesson 5 Practice Session slides](https://docs.google.com/presentation/d/1h1yP-l7Ai2SxtNX0Fq4tzq1g4h5qcoGm8vMUNMZhB6I/edit). Suggested time: 90 minutes. Each student uses **one personal fork**, writes their own workflow, and reviews their own runs.
 
+**Windows students without PHP or Composer:** complete steps 1–4 of the [Windows setup guide](windows-setup.md) before the session. It shows the downloads, `php.ini` extension settings, PATH setup and version checks. Git and your existing editor are enough for the other tools.
+
 ## 1. Fork and clone
 
 On [the starter repository](https://github.com/maohieng/laravel-student-management-ci), choose **Fork**, select your personal account, and create your fork. Keep the repository name and the `main` branch. Open your fork's **Actions** tab and enable workflows if prompted. The starter includes application code and tests, but intentionally has no active CI workflow.
 
-Replace `YOUR_USERNAME` below before running these commands in Terminal or Git Bash:
+Replace `YOUR_USERNAME` below before running these commands in PowerShell on Windows, or Terminal/Git Bash. The Git commands in this guide work in all three:
 
 ```bash
 git clone https://github.com/YOUR_USERNAME/laravel-student-management-ci.git
@@ -24,6 +26,20 @@ git switch main
 
 You need PHP 8.3+, Composer 2, and the PHP extensions listed in the root README.
 
+**Windows PowerShell:** run these commands inside your cloned project folder. For installation help, use the [Windows setup guide](windows-setup.md#5-set-up-your-fork-and-run-the-tests).
+
+```powershell
+composer install
+composer check-platform-reqs
+Copy-Item .env.example .env
+Copy-Item .env.testing.example .env.testing
+php artisan key:generate
+php artisan key:generate --env=testing
+composer test
+```
+
+**macOS/Linux or Git Bash:**
+
 ```bash
 composer install
 cp .env.example .env
@@ -33,15 +49,11 @@ php artisan key:generate --env=testing
 composer test
 ```
 
-The supplied baseline currently contains 17 passing tests. Tests use disposable SQLite data and do not require a running web server. Keep the supplied tests and `phpunit.xml` unchanged.
+If either environment file already exists, keep it and skip that copy command. The supplied baseline currently contains 17 passing tests. Tests use disposable SQLite data and do not require a running web server. Keep the supplied tests and `phpunit.xml` unchanged.
 
 ## 3. Write your own workflow
 
-```bash
-mkdir -p .github/workflows
-```
-
-Create `.github/workflows/laravel-ci.yml` in your editor. Combine **Parts 1, 2, and 3 in the slides** into this one file. Use spaces for YAML indentation.
+In your editor, create a `.github` folder in the project root, a `workflows` folder inside it, then a file named `laravel-ci.yml`. The complete path is `.github/workflows/laravel-ci.yml`. Combine **Parts 1, 2, and 3 in the slides** into this one file. Use spaces for YAML indentation.
 
 Your workflow must include:
 
