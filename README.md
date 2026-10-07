@@ -1,8 +1,12 @@
-# Student Management API — Laravel CI showcase
+# Student Management API — Laravel CI practice starter
 
-[![Laravel CI](https://github.com/maohieng/laravel-student-management-ci/actions/workflows/laravel-ci.yml/badge.svg)](https://github.com/maohieng/laravel-student-management-ci/actions/workflows/laravel-ci.yml)
 
-A small Laravel 13 API for **Lesson 5 — Continuous Integration for Laravel**. Students can create, list, view, update and delete student records, then see GitHub Actions check the same behavior automatically.
+A small Laravel 13 API for **Lesson 5 — Continuous Integration for Laravel**. Students can create, list, view, update and delete student records, then configure GitHub Actions in their own forks to check the same behavior automatically.
+
+**The starter intentionally contains no active CI workflow on `main`.** Follow the [Lesson 5 Practice Session](https://docs.google.com/presentation/d/1h1yP-l7Ai2SxtNX0Fq4tzq1g4h5qcoGm8vMUNMZhB6I/edit) to write your own workflow.
+
+- [Individual student instructions](docs/LESSON5_PRACTICE.md)
+- [Instructor: publish and restore a classroom regression](docs/INSTRUCTOR_GUIDE.md)
 
 This is a local/classroom demo with synthetic data and **no authentication**. Do not expose it with real student information. A production system needs authentication, authorization and appropriate data protection.
 
@@ -84,14 +88,14 @@ Locally, PHPUnit defaults to an isolated in-memory SQLite database. In CI, the w
 
 ## What CI does
 
-A push, pull request or manual **Actions → Laravel CI → Run workflow** starts a fresh Ubuntu runner:
+After you create the workflow in your own fork, a push, pull request or manual **Actions → Laravel CI → Run workflow** starts a fresh Ubuntu runner:
 
 1. Check out the code.
 2. Install PHP 8.3 and Composer.
-3. Validate `composer.json` and install dependencies (including test tools).
+3. Install Composer dependencies (including test tools).
 4. Copy environment templates, generate a testing application key and clear cached configuration.
 5. Create an empty SQLite file and run migrations.
-6. Run the API tests and upload the JUnit report.
+6. Run the API tests and read the result in the Actions log.
 
 ```mermaid
 flowchart TD
@@ -107,16 +111,17 @@ flowchart TD
 
 CI checks code; it does not deploy the application. A green check validates the tested scenarios, not every possible behavior. Requiring this check before merging is a separate repository branch-protection setting.
 
-## Group demonstration: red → green
+## Individual practice: green → sync → red → repair → green
 
-1. Each student creates a branch, for example `git switch -c demo/sokha-ci`.
-2. Run the existing tests and confirm a green baseline.
-3. In `test_creates_student_and_persists_it`, temporarily change `assertCreated()` to `assertOk()`. The API correctly returns 201, so expecting 200 deliberately fails.
-4. Commit and push the branch; open a pull request. In Actions, open **Run automated CRUD and validation tests** and locate the expected/actual status mismatch.
-5. Restore `assertCreated()`, run tests, commit and push again. The same pull request receives a new green check.
-6. A teammate reviews the change and the CI result before the group merges. Keep intentional failures on a demonstration branch, not `main`.
+1. Fork this starter into your personal account and enable Actions if prompted.
+2. Use the practice slides to create `.github/workflows/laravel-ci.yml` yourself.
+3. Push to your fork and review a successful baseline run.
+4. Wait for the instructor to publish a deliberate response-status regression.
+5. Fetch and merge `upstream/main`, then push to your fork to trigger your CI.
+6. Read the failed test: expected 201, actual 200. Repair the controller, keep the test, and push again.
+7. Show your initial green, failed, and repaired green run links. No long writing assignment is required.
 
-For a real feature exercise, add a new validation case and its test, then repeat the same review workflow. No lengthy written assignment is required.
+Use a normal merge so your workflow remains in your fork. Do not hard-reset or force-sync to upstream. See the [student guide](docs/LESSON5_PRACTICE.md) for commands and existing-fork handling. The [instructor guide](docs/INSTRUCTOR_GUIDE.md) explains the exact change, when to publish it, and how to restore the starter. The intentional break has not been applied to the starter now.
 
 ## Where to look
 
@@ -127,6 +132,8 @@ For a real feature exercise, add a new validation case and its test, then repeat
 - `app/Models/Student.php`: allowed database fields.
 - `database/migrations/`: database schema.
 - `tests/Feature/StudentApiTest.php`: executable examples.
-- `.github/workflows/laravel-ci.yml`: CI pipeline.
+- `.github/workflows/laravel-ci.yml`: the workflow you create in your own fork (intentionally absent upstream).
+- `docs/LESSON5_PRACTICE.md`: individual fork, CI, sync, and repair instructions.
+- `docs/INSTRUCTOR_GUIDE.md`: supervised regression and restoration guidance.
 
 Laravel's application skeleton is adapted from [laravel/laravel](https://github.com/laravel/laravel). Framework documentation: [testing](https://laravel.com/docs/13.x/testing), [validation](https://laravel.com/docs/13.x/validation), [Eloquent resources](https://laravel.com/docs/13.x/eloquent-resources).
