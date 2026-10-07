@@ -8,3 +8,4 @@
 /database/*.sqlite*
 /composer.phar
 /node_modules/
+/test-results.xml
